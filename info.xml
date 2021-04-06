@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <extension key="proca-civicrm" type="module">
   <file>proca_civicrm</file>
-  <name>FIXME</name>
+  <name>Integrate with external petition</name>
   <description>FIXME</description>
   <license>AGPL-3.0</license>
   <maintainer>
@@ -9,9 +9,9 @@
     <email>github@tttp.eu</email>
   </maintainer>
   <urls>
-    <url desc="Main Extension Page">http://FIXME</url>
-    <url desc="Documentation">http://FIXME</url>
-    <url desc="Support">http://FIXME</url>
+    <url desc="Main Extension Page">https://github.com/fixthestatusquo/proca-civicrm/</url>
+    <url desc="Documentation">https://github.com/fixthestatusquo/proca-civicrm/</url>
+    <url desc="Support">https://github.com/fixthestatusquo/proca-civicrm/</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
   <releaseDate>2021-04-06</releaseDate>
@@ -20,7 +20,6 @@
   <compatibility>
     <ver>5.0</ver>
   </compatibility>
-  <comments>This is a new, undeveloped module</comments>
   <classloader>
     <psr4 prefix="Civi\" path="Civi"/>
   </classloader>
