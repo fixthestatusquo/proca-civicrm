@@ -30,7 +30,7 @@ function _civicrm_api3_queue_item_Create_spec(&$spec) {
  */
 function civicrm_api3_queue_item_Create($params) {
   $queue = CRM_Queue_Service::singleton()->create(array(
-    'type' => 'Civirules',
+    'type' => 'Sql',
   'name'  => $params['queue'],
     'reset' => false, //do not flush queue upon creation
   ));
@@ -40,20 +40,10 @@ $task = $queue->createItem(new CRM_Queue_Task(
   $params,
   "api.".$params['entity'].".".$params['action'] // title
 ));
-  if (array_key_exists('magicword', $params) && $params['magicword'] == 'sesame') {
-    $returnValues = array(
-      // OK, return several data rows
-      12 => ['id' => 12, 'name' => 'Twelve'],
-      34 => ['id' => 34, 'name' => 'Thirty four'],
-      56 => ['id' => 56, 'name' => 'Fifty six'],
-    );
     // ALTERNATIVE: $returnValues = []; // OK, success
     // ALTERNATIVE: $returnValues = ["Some value"]; // OK, return a single value
 
     // Spec: civicrm_api3_create_success($values = 1, $params = [], $entity = NULL, $action = NULL)
-    return civicrm_api3_create_success($returnValues, $params, 'QueueItem', 'Create');
-  }
-  else {
-    throw new API_Exception(/*error_message*/ 'Everyone knows that the magicword is "sesame"', /*error_code*/ 'magicword_incorrect');
-  }
+    return civicrm_api3_create_success([], $params, 'QueueItem', 'Create');
+//    throw new API_Exception(/*error_message*/ 'Everyone knows that the magicword is "sesame"', /*error_code*/ 'magicword_incorrect');
 }
