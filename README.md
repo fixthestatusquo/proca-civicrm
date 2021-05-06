@@ -32,7 +32,7 @@ install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
 git clone https://github.com/FIXME/proca-civicrm.git
-cv en proca_civicrm
+cv en proca
 ```
 
 ## Getting Started

@@ -6,10 +6,10 @@
  * The ExtensionUtil class provides small stubs for accessing resources of this
  * extension.
  */
-class CRM_ProcaCivicrm_ExtensionUtil {
-  const SHORT_NAME = 'proca_civicrm';
+class CRM_Proca_ExtensionUtil {
+  const SHORT_NAME = 'proca';
   const LONG_NAME = 'proca-civicrm';
-  const CLASS_PREFIX = 'CRM_ProcaCivicrm';
+  const CLASS_PREFIX = 'CRM_Proca';
 
   /**
    * Translate a string using the extension's domain.
@@ -77,14 +77,14 @@ class CRM_ProcaCivicrm_ExtensionUtil {
 
 }
 
-use CRM_ProcaCivicrm_ExtensionUtil as E;
+use CRM_Proca_ExtensionUtil as E;
 
 /**
  * (Delegated) Implements hook_civicrm_config().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config
  */
-function _proca_civicrm_civix_civicrm_config(&$config = NULL) {
+function _proca_civix_civicrm_config(&$config = NULL) {
   static $configured = FALSE;
   if ($configured) {
     return;
@@ -114,8 +114,8 @@ function _proca_civicrm_civix_civicrm_config(&$config = NULL) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_xmlMenu
  */
-function _proca_civicrm_civix_civicrm_xmlMenu(&$files) {
-  foreach (_proca_civicrm_civix_glob(__DIR__ . '/xml/Menu/*.xml') as $file) {
+function _proca_civix_civicrm_xmlMenu(&$files) {
+  foreach (_proca_civix_glob(__DIR__ . '/xml/Menu/*.xml') as $file) {
     $files[] = $file;
   }
 }
@@ -125,9 +125,9 @@ function _proca_civicrm_civix_civicrm_xmlMenu(&$files) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_install
  */
-function _proca_civicrm_civix_civicrm_install() {
-  _proca_civicrm_civix_civicrm_config();
-  if ($upgrader = _proca_civicrm_civix_upgrader()) {
+function _proca_civix_civicrm_install() {
+  _proca_civix_civicrm_config();
+  if ($upgrader = _proca_civix_upgrader()) {
     $upgrader->onInstall();
   }
 }
@@ -137,9 +137,9 @@ function _proca_civicrm_civix_civicrm_install() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall
  */
-function _proca_civicrm_civix_civicrm_postInstall() {
-  _proca_civicrm_civix_civicrm_config();
-  if ($upgrader = _proca_civicrm_civix_upgrader()) {
+function _proca_civix_civicrm_postInstall() {
+  _proca_civix_civicrm_config();
+  if ($upgrader = _proca_civix_upgrader()) {
     if (is_callable([$upgrader, 'onPostInstall'])) {
       $upgrader->onPostInstall();
     }
@@ -151,9 +151,9 @@ function _proca_civicrm_civix_civicrm_postInstall() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_uninstall
  */
-function _proca_civicrm_civix_civicrm_uninstall() {
-  _proca_civicrm_civix_civicrm_config();
-  if ($upgrader = _proca_civicrm_civix_upgrader()) {
+function _proca_civix_civicrm_uninstall() {
+  _proca_civix_civicrm_config();
+  if ($upgrader = _proca_civix_upgrader()) {
     $upgrader->onUninstall();
   }
 }
@@ -163,9 +163,9 @@ function _proca_civicrm_civix_civicrm_uninstall() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_enable
  */
-function _proca_civicrm_civix_civicrm_enable() {
-  _proca_civicrm_civix_civicrm_config();
-  if ($upgrader = _proca_civicrm_civix_upgrader()) {
+function _proca_civix_civicrm_enable() {
+  _proca_civix_civicrm_config();
+  if ($upgrader = _proca_civix_upgrader()) {
     if (is_callable([$upgrader, 'onEnable'])) {
       $upgrader->onEnable();
     }
@@ -178,9 +178,9 @@ function _proca_civicrm_civix_civicrm_enable() {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_disable
  * @return mixed
  */
-function _proca_civicrm_civix_civicrm_disable() {
-  _proca_civicrm_civix_civicrm_config();
-  if ($upgrader = _proca_civicrm_civix_upgrader()) {
+function _proca_civix_civicrm_disable() {
+  _proca_civix_civicrm_config();
+  if ($upgrader = _proca_civix_upgrader()) {
     if (is_callable([$upgrader, 'onDisable'])) {
       $upgrader->onDisable();
     }
@@ -199,21 +199,21 @@ function _proca_civicrm_civix_civicrm_disable() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_upgrade
  */
-function _proca_civicrm_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  if ($upgrader = _proca_civicrm_civix_upgrader()) {
+function _proca_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
+  if ($upgrader = _proca_civix_upgrader()) {
     return $upgrader->onUpgrade($op, $queue);
   }
 }
 
 /**
- * @return CRM_ProcaCivicrm_Upgrader
+ * @return CRM_Proca_Upgrader
  */
-function _proca_civicrm_civix_upgrader() {
-  if (!file_exists(__DIR__ . '/CRM/ProcaCivicrm/Upgrader.php')) {
+function _proca_civix_upgrader() {
+  if (!file_exists(__DIR__ . '/CRM/Proca/Upgrader.php')) {
     return NULL;
   }
   else {
-    return CRM_ProcaCivicrm_Upgrader_Base::instance();
+    return CRM_Proca_Upgrader_Base::instance();
   }
 }
 
@@ -228,7 +228,7 @@ function _proca_civicrm_civix_upgrader() {
  *
  * @return array
  */
-function _proca_civicrm_civix_find_files($dir, $pattern) {
+function _proca_civix_find_files($dir, $pattern) {
   if (is_callable(['CRM_Utils_File', 'findFiles'])) {
     return CRM_Utils_File::findFiles($dir, $pattern);
   }
@@ -237,7 +237,7 @@ function _proca_civicrm_civix_find_files($dir, $pattern) {
   $result = [];
   while (!empty($todos)) {
     $subdir = array_shift($todos);
-    foreach (_proca_civicrm_civix_glob("$subdir/$pattern") as $match) {
+    foreach (_proca_civix_glob("$subdir/$pattern") as $match) {
       if (!is_dir($match)) {
         $result[] = $match;
       }
@@ -264,8 +264,8 @@ function _proca_civicrm_civix_find_files($dir, $pattern) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_managed
  */
-function _proca_civicrm_civix_civicrm_managed(&$entities) {
-  $mgdFiles = _proca_civicrm_civix_find_files(__DIR__, '*.mgd.php');
+function _proca_civix_civicrm_managed(&$entities) {
+  $mgdFiles = _proca_civix_find_files(__DIR__, '*.mgd.php');
   sort($mgdFiles);
   foreach ($mgdFiles as $file) {
     $es = include $file;
@@ -290,12 +290,12 @@ function _proca_civicrm_civix_civicrm_managed(&$entities) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_caseTypes
  */
-function _proca_civicrm_civix_civicrm_caseTypes(&$caseTypes) {
+function _proca_civix_civicrm_caseTypes(&$caseTypes) {
   if (!is_dir(__DIR__ . '/xml/case')) {
     return;
   }
 
-  foreach (_proca_civicrm_civix_glob(__DIR__ . '/xml/case/*.xml') as $file) {
+  foreach (_proca_civix_glob(__DIR__ . '/xml/case/*.xml') as $file) {
     $name = preg_replace('/\.xml$/', '', basename($file));
     if ($name != CRM_Case_XMLProcessor::mungeCaseType($name)) {
       $errorMessage = sprintf("Case-type file name is malformed (%s vs %s)", $name, CRM_Case_XMLProcessor::mungeCaseType($name));
@@ -318,12 +318,12 @@ function _proca_civicrm_civix_civicrm_caseTypes(&$caseTypes) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_angularModules
  */
-function _proca_civicrm_civix_civicrm_angularModules(&$angularModules) {
+function _proca_civix_civicrm_angularModules(&$angularModules) {
   if (!is_dir(__DIR__ . '/ang')) {
     return;
   }
 
-  $files = _proca_civicrm_civix_glob(__DIR__ . '/ang/*.ang.php');
+  $files = _proca_civix_glob(__DIR__ . '/ang/*.ang.php');
   foreach ($files as $file) {
     $name = preg_replace(':\.ang\.php$:', '', basename($file));
     $module = include $file;
@@ -339,8 +339,8 @@ function _proca_civicrm_civix_civicrm_angularModules(&$angularModules) {
  *
  * Find any and return any files matching "*.theme.php"
  */
-function _proca_civicrm_civix_civicrm_themes(&$themes) {
-  $files = _proca_civicrm_civix_glob(__DIR__ . '/*.theme.php');
+function _proca_civix_civicrm_themes(&$themes) {
+  $files = _proca_civix_glob(__DIR__ . '/*.theme.php');
   foreach ($files as $file) {
     $themeMeta = include $file;
     if (empty($themeMeta['name'])) {
@@ -366,7 +366,7 @@ function _proca_civicrm_civix_civicrm_themes(&$themes) {
  *
  * @return array
  */
-function _proca_civicrm_civix_glob($pattern) {
+function _proca_civix_glob($pattern) {
   $result = glob($pattern);
   return is_array($result) ? $result : [];
 }
@@ -382,7 +382,7 @@ function _proca_civicrm_civix_glob($pattern) {
  *
  * @return bool
  */
-function _proca_civicrm_civix_insert_navigation_menu(&$menu, $path, $item) {
+function _proca_civix_insert_navigation_menu(&$menu, $path, $item) {
   // If we are done going down the path, insert menu
   if (empty($path)) {
     $menu[] = [
@@ -403,7 +403,7 @@ function _proca_civicrm_civix_insert_navigation_menu(&$menu, $path, $item) {
         if (!isset($entry['child'])) {
           $entry['child'] = [];
         }
-        $found = _proca_civicrm_civix_insert_navigation_menu($entry['child'], implode('/', $path), $item);
+        $found = _proca_civix_insert_navigation_menu($entry['child'], implode('/', $path), $item);
       }
     }
     return $found;
@@ -413,9 +413,9 @@ function _proca_civicrm_civix_insert_navigation_menu(&$menu, $path, $item) {
 /**
  * (Delegated) Implements hook_civicrm_navigationMenu().
  */
-function _proca_civicrm_civix_navigationMenu(&$nodes) {
+function _proca_civix_navigationMenu(&$nodes) {
   if (!is_callable(['CRM_Core_BAO_Navigation', 'fixNavigationMenu'])) {
-    _proca_civicrm_civix_fixNavigationMenu($nodes);
+    _proca_civix_fixNavigationMenu($nodes);
   }
 }
 
@@ -423,17 +423,17 @@ function _proca_civicrm_civix_navigationMenu(&$nodes) {
  * Given a navigation menu, generate navIDs for any items which are
  * missing them.
  */
-function _proca_civicrm_civix_fixNavigationMenu(&$nodes) {
+function _proca_civix_fixNavigationMenu(&$nodes) {
   $maxNavID = 1;
   array_walk_recursive($nodes, function($item, $key) use (&$maxNavID) {
     if ($key === 'navID') {
       $maxNavID = max($maxNavID, $item);
     }
   });
-  _proca_civicrm_civix_fixNavigationMenuItems($nodes, $maxNavID, NULL);
+  _proca_civix_fixNavigationMenuItems($nodes, $maxNavID, NULL);
 }
 
-function _proca_civicrm_civix_fixNavigationMenuItems(&$nodes, &$maxNavID, $parentID) {
+function _proca_civix_fixNavigationMenuItems(&$nodes, &$maxNavID, $parentID) {
   $origKeys = array_keys($nodes);
   foreach ($origKeys as $origKey) {
     if (!isset($nodes[$origKey]['attributes']['parentID']) && $parentID !== NULL) {
@@ -448,7 +448,7 @@ function _proca_civicrm_civix_fixNavigationMenuItems(&$nodes, &$maxNavID, $paren
       $origKey = $newKey;
     }
     if (isset($nodes[$origKey]['child']) && is_array($nodes[$origKey]['child'])) {
-      _proca_civicrm_civix_fixNavigationMenuItems($nodes[$origKey]['child'], $maxNavID, $nodes[$origKey]['attributes']['navID']);
+      _proca_civix_fixNavigationMenuItems($nodes[$origKey]['child'], $maxNavID, $nodes[$origKey]['attributes']['navID']);
     }
   }
 }
@@ -458,7 +458,7 @@ function _proca_civicrm_civix_fixNavigationMenuItems(&$nodes, &$maxNavID, $paren
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterSettingsFolders
  */
-function _proca_civicrm_civix_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
+function _proca_civix_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   $settingsDir = __DIR__ . DIRECTORY_SEPARATOR . 'settings';
   if (!in_array($settingsDir, $metaDataFolders) && is_dir($settingsDir)) {
     $metaDataFolders[] = $settingsDir;
@@ -472,6 +472,6 @@ function _proca_civicrm_civix_civicrm_alterSettingsFolders(&$metaDataFolders = N
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
  */
-function _proca_civicrm_civix_civicrm_entityTypes(&$entityTypes) {
+function _proca_civix_civicrm_entityTypes(&$entityTypes) {
   $entityTypes = array_merge($entityTypes, []);
 }

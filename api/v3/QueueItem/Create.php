@@ -1,5 +1,5 @@
 <?php
-use CRM_ProcaCivicrm_ExtensionUtil as E;
+use CRM_Proca_ExtensionUtil as E;
 
 /**
  * QueueItem.Create API specification (optional)

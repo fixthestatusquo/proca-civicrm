@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <extension key="proca-civicrm" type="module">
-  <file>proca_civicrm</file>
+  <file>proca</file>
   <name>Integrate with external petition</name>
   <description>FIXME</description>
   <license>AGPL-3.0</license>
@@ -24,6 +24,6 @@
     <psr4 prefix="Civi\" path="Civi"/>
   </classloader>
   <civix>
-    <namespace>CRM/ProcaCivicrm</namespace>
+    <namespace>CRM/Proca</namespace>
   </civix>
 </extension>

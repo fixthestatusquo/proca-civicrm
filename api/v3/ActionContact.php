@@ -1,5 +1,5 @@
 <?php
-function _civicrm_api3_wemove_contact_create_spec(&$spec) {
+function _civicrm_api3_action_contact_create_spec(&$spec) {
   $spec['firstname'] = [
     'name' => 'firstname',
     'title' => ts('First name'),
@@ -112,10 +112,10 @@ function _civicrm_api3_wemove_contact_create_spec(&$spec) {
  * @return array
  * @throws \CiviCRM_API3_Exception
  */
-function civicrm_api3_wemove_contact_create($params) {
-  if (CRM_Commitcivi_Model_Contact::isAnonymous($params['email'])) {
+function civicrm_api3_action_contact_create($params) {
+  if (CRM_Proca_Model_Contact::isAnonymous($params['email'])) {
     $params = [
-      'id' => CRM_Commitcivi_Logic_Settings::anonymousId(),
+      'id' => CRM_Proca_Logic_Settings::anonymousId(),
     ];
     $result = civicrm_api3('Contact', 'get', $params);
     $contactId = $result['id'];
@@ -124,10 +124,10 @@ function civicrm_api3_wemove_contact_create($params) {
     return civicrm_api3_create_success($returnResult, $params);
   }
 
-  $groupId = CRM_Commitcivi_Logic_Settings::groupId();
-  $campaign = new CRM_Commitcivi_Logic_Campaign();
+  $groupId = CRM_Proca_Logic_Settings::groupId();
+  $campaign = new CRM_Proca_Logic_Campaign();
   $locale = $campaign->determineLanguage($params['action_name']);
-  $contactObj = new CRM_Commitcivi_Logic_Contact();
+  $contactObj = new CRM_Proca_Logic_Contact();
   $options = [
     'locale' => $locale,
   ];
@@ -194,7 +194,7 @@ function civicrm_api3_wemove_contact_create($params) {
   $returnResult = [$contactId => $contactResult];
 
   $language = substr($locale, 0, 2);
-  $tag = new CRM_Commitcivi_Logic_Tag();
+  $tag = new CRM_Proca_Logic_Tag();
   $tag->setLanguageTag($contactId, $language);
   if ($contactResult['preferred_language'] != $locale) {
     $contactObj->set($contactId, ['preferred_language' => $locale]);
