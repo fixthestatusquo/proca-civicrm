@@ -11,9 +11,9 @@ use CRM_Proca_ExtensionUtil as E;
  */
 function _civicrm_api3_queue_item_Create_spec(&$spec) {
 //  $spec['queue']['api.required'] = 1;
-  $spec['queue']['api.default'] = 'api';
-  $spec['entity']['api.required'] = 1;
-  $spec['action']['api.required'] = 1;
+  $spec['queue']['api.default'] = 'proca';
+  $spec['title']['api.required'] = 1;
+//  $spec['action']['api.default'] = 'create';
 }
 
 /**
@@ -34,11 +34,10 @@ function civicrm_api3_queue_item_Create($params) {
   'name'  => $params['queue'],
     'reset' => false, //do not flush queue upon creation
   ));
-
 $task = $queue->createItem(new CRM_Queue_Task(
-  ['CRM_Queue_Page_QueuedAPI', 'process'], // callback
+  ['CRM_Proca_Queue_API', 'process'], // callback
   $params,
-  "api.".$params['entity'].".".$params['action'] // title
+  $params["title"] // title
 ));
     // ALTERNATIVE: $returnValues = []; // OK, success
     // ALTERNATIVE: $returnValues = ["Some value"]; // OK, return a single value
