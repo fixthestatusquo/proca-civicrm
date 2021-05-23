@@ -1,7 +1,7 @@
 <?php
 
 
-function fetch ($org,$campaign,$associative) {
+function fetch ($p) {
   
 $query = 'query actions ($org:String!,$limit:Int,$start:Int,$campaign:Int) {
   exportActions(start:$start,campaignId:$campaign,limit:$limit,orgName:$org,onlyOptIn:true) {
@@ -24,14 +24,14 @@ $query = 'query actions ($org:String!,$limit:Int,$start:Int,$campaign:Int) {
     "operationName" => "actions",
     "query" => $query,
     "variables" => array (
-      "org" => $org,
-      "limit" => 2
+      "org" => $p['org'],
+      "limit" => $p['limit'] ?:10,
+      "start" => $p['start'] ?:0
     )
 );
 
-  if ($campaign)
-    $params["variables"]["campaign"]=$campaign;
-
+  if (array_key_exists('campaign',$p))
+    $params["variables"]["campaign"]=$p['campaign'];
   $username = Civi::settings()->get('proca_login');
 $password = Civi::settings()->get('proca_password');
 $ch = curl_init();
@@ -56,8 +56,7 @@ curl_setopt($ch, CURLOPT_VERBOSE, true);
 
 $data = curl_exec($ch);
 curl_close($ch);
-
-$obj = json_decode($data,$associative);
+$obj = json_decode($data,$p['associative'] ?: true);
   return $obj;
 }
 
