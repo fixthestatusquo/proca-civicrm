@@ -34,7 +34,7 @@ function civicrm_api3_action_contact_Fetch($params) {
   include 'lib/proca.php';
 
   $returnValues = fetch($params);
-  if (array_key_exists("errors",$returnValues)) {
+  if (!$returnValues || array_key_exists("errors",$returnValues)) {
     throw new API_Exception ($returnValues["errors"]["message"]);
   }
   return civicrm_api3_create_success($returnValues["data"]["exportActions"], $params, 'ActionContact', 'Fetch');

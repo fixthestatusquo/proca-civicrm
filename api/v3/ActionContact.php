@@ -113,16 +113,6 @@ function _civicrm_api3_action_contact_create_spec(&$spec) {
  * @throws \CiviCRM_API3_Exception
  */
 function civicrm_api3_action_contact_create($params) {
-  if (CRM_Proca_Model_Contact::isAnonymous($params['email'])) {
-    $params = [
-      'id' => CRM_Proca_Logic_Settings::anonymousId(),
-    ];
-    $result = civicrm_api3('Contact', 'get', $params);
-    $contactId = $result['id'];
-    $contactResult = $result['values'][$contactId];
-    $returnResult = [$contactId => $contactResult];
-    return civicrm_api3_create_success($returnResult, $params);
-  }
 
   $groupId = CRM_Proca_Logic_Settings::groupId();
   $campaign = new CRM_Proca_Logic_Campaign();

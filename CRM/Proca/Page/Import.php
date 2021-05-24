@@ -13,11 +13,15 @@ class CRM_Proca_Page_Import extends CRM_Core_Page {
     'reset' => false, //do not flush queue upon creation
   ));
 
+  $mode = 
+    CRM_Utils_Request::retrieve('mode', 'String') === 'abort' 
+    ? CRM_Queue_Runner::ERROR_ABORT
+    : CRM_Queue_Runner::ERROR_CONTINUE;
+
   $runner = new CRM_Queue_Runner([
     'title' => ts('Demo Queue Runner'),
     'queue' => $queue,
-    'errorMode' => CRM_Queue_Runner::ERROR_CONTINUE,
-    //'errorMode' => CRM_Queue_Runner::ERROR_ABORT,
+    'errorMode' => $mode,
   ]);
 
   $maxRunTime = time() + 30; //stop executing next item after 30 seconds
