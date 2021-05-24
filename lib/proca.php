@@ -11,9 +11,7 @@ $query = 'query actions ($org:String!,$limit:Int,$start:Int,$campaign:Int) {
     },campaign {
       externalId,name
     },contact {
-      contactRef,nonce,payload,publicKey {
-        public
-      }
+      contactRef,nonce,payload,publicKey {public},signKey{public}
     },
     fields {key,value},
     tracking {medium,campaign,source,content}

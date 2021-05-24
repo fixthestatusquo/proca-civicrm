@@ -22,7 +22,6 @@ class CRM_Proca_Page_Ping extends CRM_Core_Page {
 }
 catch (CiviCRM_API3_Exception $e) {
   $error = $e->getMessage();
-  print_r($error);
 }
 
 foreach ($contacts["values"] as $contact) {
