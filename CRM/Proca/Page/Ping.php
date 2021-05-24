@@ -8,7 +8,9 @@ class CRM_Proca_Page_Ping extends CRM_Core_Page {
     // Civi::settings()->set('frobulatorApiKey', $encrypted);
     $org = Civi::settings()->get('proca_org');
     $last=Civi::settings()->get('proca_lastid');
-    $next=1+$last;
+    //$next=1+$last;
+
+    $next=0;
   $queue = CRM_Queue_Service::singleton()->create(array(
     'type' => 'Sql',
   'name'  => 'proca',
@@ -16,7 +18,7 @@ class CRM_Proca_Page_Ping extends CRM_Core_Page {
   ));
     try {
 
-  $contacts = civicrm_api3('ActionContact', 'fetch', array('org' => $org,'start' => $next, 'limit' => 1000));
+  $contacts = civicrm_api3('ActionContact', 'fetch', array('org' => $org,'start' => $next, 'limit' => 3));
 }
 catch (CiviCRM_API3_Exception $e) {
   $error = $e->getMessage();
@@ -25,17 +27,20 @@ catch (CiviCRM_API3_Exception $e) {
 
 foreach ($contacts["values"] as $contact) {
   $last=$contact["actionId"];
-$task = $queue->createItem(new CRM_Queue_Task(
-  ['CRM_Proca_Page_ActionContact', 'process'], // callback
-  $contact,
-ts("import from proca") . $contact["actionId"] . "-" . $contact["actionType"] // title
-));
 
+
+$task = $queue->createItem(new CRM_Queue_Task(
+  ['CRM_Proca_ActionContact', 'process'], // callback
+  [$contact,$contact["actionId"]], // needs to be an array, if object gets flattened
+ts("import from proca ") . $contact["actionId"] . "-" . $contact["actionType"] // title
+));
+ 
 
   }
-    $last=Civi::settings()->set('proca_lastid',$last);
+    Civi::settings()->set('proca_lastid',$last);
     // Example: Assign a variable for use in a template
-    $this->assign('currentTime', date('Y-m-d H:i:s'));
+    $this->assign('fetched', $contacts["count"]);
+    $this->assign('lastid', $last);
 
     parent::run();
 
