@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_Donation {
+class CRM_Proca_Logic_Donation {
 
   protected $frequencyInterval = 1;
 
@@ -23,7 +23,7 @@ class CRM_Commitcivi_Logic_Donation {
    * @return bool
    */
   protected function isRecurring($donationType) {
-    return $donationType == CRM_Commitcivi_Model_Donation::TYPE_RECURRING;
+    return $donationType == CRM_Proca_Model_Donation::TYPE_RECURRING;
   }
 
   /**
@@ -70,11 +70,11 @@ class CRM_Commitcivi_Logic_Donation {
    * Add UTM field values from event to $params as custom contribution fields
    *
    * @param array $params
-   * @param \CRM_Commitcivi_Model_Utm $utm
+   * @param \CRM_Proca_Model_Utm $utm
    *
    * @return mixed
    */
-  protected function setSourceFields($params, CRM_Commitcivi_Model_Utm $utm) {
+  protected function setSourceFields($params, CRM_Proca_Model_Utm $utm) {
     $mapping = [
       'Source' => 'field_contribution_source',
       'Medium' => 'field_contribution_medium',
@@ -93,12 +93,12 @@ class CRM_Commitcivi_Logic_Donation {
    * Add UTM field values from event to $params as custom recurring contribution fields
    *
    * @param $params
-   * @param \CRM_Commitcivi_Model_Utm $utm
+   * @param \CRM_Proca_Model_Utm $utm
    *
    * @return mixed
    * @throws \CiviCRM_API3_Exception
    */
-  protected function setRecurSourceFields($params, CRM_Commitcivi_Model_Utm $utm) {
+  protected function setRecurSourceFields($params, CRM_Proca_Model_Utm $utm) {
     if ($utm->Source) {
       $params[CRM_Contributm_Model_UtmRecur::utmSource()] = $utm->Source;
     }
@@ -117,12 +117,12 @@ class CRM_Commitcivi_Logic_Donation {
 
   /**
    * Set UTM fields for contribution
-   * @param \CRM_Commitcivi_Model_Event $event
+   * @param \CRM_Proca_Model_Event $event
    * @param $contributionId
    *
    * @throws \CiviCRM_API3_Exception
    */
-  protected function setUtms(CRM_Commitcivi_Model_Event $event, $contributionId) {
+  protected function setUtms(CRM_Proca_Model_Event $event, $contributionId) {
     $params = [
       'sequential' => 1,
       'id' => $contributionId,
@@ -133,12 +133,12 @@ class CRM_Commitcivi_Logic_Donation {
 
   /**
    * Set UTM fields for recurring contribution
-   * @param \CRM_Commitcivi_Model_Event $event
+   * @param \CRM_Proca_Model_Event $event
    * @param $recurId
    *
    * @throws \CiviCRM_API3_Exception
    */
-  protected function setRecurUtms(CRM_Commitcivi_Model_Event $event, $recurId) {
+  protected function setRecurUtms(CRM_Proca_Model_Event $event, $recurId) {
     $params = [
       'sequential' => 1,
       'id' => $recurId,

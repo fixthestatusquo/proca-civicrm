@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_DonationSepa extends CRM_Commitcivi_Logic_Donation {
+class CRM_Proca_Logic_DonationSepa extends CRM_Proca_Logic_Donation {
 
   const CYCLE_DAY_FIRST = 6;
   const CYCLE_DAY_SECOND = 21;
@@ -8,14 +8,14 @@ class CRM_Commitcivi_Logic_DonationSepa extends CRM_Commitcivi_Logic_Donation {
   /**
    * Create a mandate for contact.
    *
-   * @param \CRM_Commitcivi_Model_Event $event
+   * @param \CRM_Proca_Model_Event $event
    * @param int $contactId
    * @param int $campaignId
    *
    * @return array
    * @throws \CiviCRM_API3_Exception
    */
-  public function sepa(CRM_Commitcivi_Model_Event $event, $contactId, $campaignId) {
+  public function sepa(CRM_Proca_Model_Event $event, $contactId, $campaignId) {
     if ($this->isRecurring($event->donation->type)) {
       return $this->setRecurring($event, $contactId, $campaignId);
     }
@@ -25,14 +25,14 @@ class CRM_Commitcivi_Logic_DonationSepa extends CRM_Commitcivi_Logic_Donation {
   }
 
   /**
-   * @param \CRM_Commitcivi_Model_Event $event
+   * @param \CRM_Proca_Model_Event $event
    * @param $contactId
    * @param $campaignId
    *
    * @return mixed
    * @throws \CiviCRM_API3_Exception
    */
-  private function setRecurring(CRM_Commitcivi_Model_Event $event, $contactId, $campaignId) {
+  private function setRecurring(CRM_Proca_Model_Event $event, $contactId, $campaignId) {
     if (!$recur = $this->findRecurring($event->donation->recurringId)) {
       $recur = $this->recurring($event, $contactId, $campaignId);
     }
@@ -40,15 +40,15 @@ class CRM_Commitcivi_Logic_DonationSepa extends CRM_Commitcivi_Logic_Donation {
   }
 
   /**
-   * @param \CRM_Commitcivi_Model_Event $event
+   * @param \CRM_Proca_Model_Event $event
    * @param $contactId
    * @param $campaignId
    *
    * @return array
    * @throws \CiviCRM_API3_Exception
    */
-  private function recurring(CRM_Commitcivi_Model_Event $event, $contactId, $campaignId) {
-    $paymentProcessorId = CRM_Commitcivi_Logic_Settings::paymentProcessorIdSepa();
+  private function recurring(CRM_Proca_Model_Event $event, $contactId, $campaignId) {
+    $paymentProcessorId = CRM_Proca_Logic_Settings::paymentProcessorIdSepa();
     $mandateType = 'RCUR';
     $params_mandate = [
       'sequential' => 1,
@@ -105,14 +105,14 @@ class CRM_Commitcivi_Logic_DonationSepa extends CRM_Commitcivi_Logic_Donation {
   }
 
   /**
-   * @param \CRM_Commitcivi_Model_Event $event
+   * @param \CRM_Proca_Model_Event $event
    * @param $contactId
    * @param $campaignId
    *
    * @return array
    * @throws \CiviCRM_API3_Exception
    */
-  private function setSingle(CRM_Commitcivi_Model_Event $event, $contactId, $campaignId) {
+  private function setSingle(CRM_Proca_Model_Event $event, $contactId, $campaignId) {
     if (!$contrib = $this->find($event->donation->transactionId)) {
       return $this->single($event, $contactId, $campaignId);
     }
@@ -120,15 +120,15 @@ class CRM_Commitcivi_Logic_DonationSepa extends CRM_Commitcivi_Logic_Donation {
   }
 
   /**
-   * @param \CRM_Commitcivi_Model_Event $event
+   * @param \CRM_Proca_Model_Event $event
    * @param $contactId
    * @param $campaignId
    *
    * @return array
    * @throws \CiviCRM_API3_Exception
    */
-  private function single(CRM_Commitcivi_Model_Event $event, $contactId, $campaignId) {
-    $paymentProcessorId = CRM_Commitcivi_Logic_Settings::paymentProcessorIdSepa();
+  private function single(CRM_Proca_Model_Event $event, $contactId, $campaignId) {
+    $paymentProcessorId = CRM_Proca_Logic_Settings::paymentProcessorIdSepa();
     $mandateType = 'OOFF';
     $params_mandate = [
       'sequential' => 1,

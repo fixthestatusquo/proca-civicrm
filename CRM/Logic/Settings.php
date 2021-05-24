@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_Settings {
+class CRM_Proca_Logic_Settings {
 
   const CACHE_PREFIX = 'eu.wemove.commitcharge';
   const PAYMENT_PROCESSOR_CARD = 'CommitChange-card';
@@ -70,7 +70,7 @@ class CRM_Commitcivi_Logic_Settings {
     $key = self::CACHE_PREFIX . __FUNCTION__;
     $cache = Civi::cache()->get($key);
     if (!isset($cache)) {
-      $id = CRM_Commitcivi_Utils_PaymentProcessor::set(self::PAYMENT_PROCESSOR_SEPA);
+      $id = CRM_Proca_Utils_PaymentProcessor::set(self::PAYMENT_PROCESSOR_SEPA);
       Civi::cache()->set($key, $id);
       return $id;
     }
@@ -87,7 +87,7 @@ class CRM_Commitcivi_Logic_Settings {
     $key = self::CACHE_PREFIX . __FUNCTION__;
     $cache = Civi::cache()->get($key);
     if (!isset($cache)) {
-      $id = CRM_Commitcivi_Utils_PaymentProcessor::set(self::PAYMENT_PROCESSOR_CARD);
+      $id = CRM_Proca_Utils_PaymentProcessor::set(self::PAYMENT_PROCESSOR_CARD);
       Civi::cache()->set($key, $id);
       return $id;
     }

@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_Campaign {
+class CRM_Proca_Logic_Campaign {
 
   /**
    * Get campaign by external identifier or CiviCRM Id.
@@ -54,7 +54,7 @@ class CRM_Commitcivi_Logic_Campaign {
       'external_identifier' => $params['external_identifier'],
       'campaign_type_id' => $params['campaign_type_id'],
       'start_date' => date('Y-m-d H:i:s'),
-      CRM_Commitcivi_Logic_Settings::fieldLanguage() => $this->determineLanguage($params['action_name']),
+      CRM_Proca_Logic_Settings::fieldLanguage() => $this->determineLanguage($params['action_name']),
     );
     $result = civicrm_api3('Campaign', 'create', $params);
     return $result['values'][0];
@@ -89,12 +89,12 @@ class CRM_Commitcivi_Logic_Campaign {
     $re = "/(.*)[_\\- ]([a-zA-Z]{2})$/";
     if (preg_match($re, $campaignName, $matches)) {
       $country = strtoupper($matches[2]);
-      $countryLangMapping = CRM_Commitcivi_Logic_Settings::countryLanguageMapping();
+      $countryLangMapping = CRM_Proca_Logic_Settings::countryLanguageMapping();
       if (array_key_exists($country, $countryLangMapping)) {
         return $countryLangMapping[$country];
       }
     }
-    return CRM_Commitcivi_Logic_Settings::defaultLanguage();
+    return CRM_Proca_Logic_Settings::defaultLanguage();
   }
 
 }

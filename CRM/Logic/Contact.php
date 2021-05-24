@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_Contact {
+class CRM_Proca_Logic_Contact {
 
   const API_GROUPCONTACT_GET = 'api.GroupContact.get';
   const API_GROUPCONTACT_CREATE = 'api.GroupContact.create';
@@ -76,8 +76,8 @@ class CRM_Commitcivi_Logic_Contact {
       }
     }
 
-    $address = new CRM_Commitcivi_Logic_Address();
-    $params['country_id'] = CRM_Commitcivi_Logic_Country::getId($params['country']);
+    $address = new CRM_Proca_Logic_Address();
+    $params['country_id'] = CRM_Proca_Logic_Country::getId($params['country']);
 
     if (is_array($existingContact) && count($existingContact) > 0) {
       $contact['id'] = $existingContact['id'];

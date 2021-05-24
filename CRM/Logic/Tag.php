@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_Tag {
+class CRM_Proca_Logic_Tag {
 
   /**
    * Set language tag for contact based on language of campaign
@@ -12,7 +12,7 @@ class CRM_Commitcivi_Logic_Tag {
    */
   public function setLanguageTag($contactId, $language) {
     if ($language) {
-      $languageTagNamePrefix = CRM_Commitcivi_Logic_Settings::languageTagNamePrefix();
+      $languageTagNamePrefix = CRM_Proca_Logic_Settings::languageTagNamePrefix();
       $tagName = $languageTagNamePrefix . $language;
       if (!($tagId = $this->getLanguageTagId($tagName))) {
         $tagId = $this->createLanguageTag($tagName);

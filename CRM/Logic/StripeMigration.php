@@ -1,14 +1,14 @@
 <?php
 
-class CRM_Commitcivi_Logic_StripeMigration
+class CRM_Proca_Logic_StripeMigration
 {
     /**
-     * @param \CRM_Commitcivi_Model_Event $event
+     * @param \CRM_Proca_Model_Event $event
      *
      * @return integer
      * @throws \CiviCRM_API3_Exception
      */
-    public function migrate(CRM_Commitcivi_Model_Event $event)
+    public function migrate(CRM_Proca_Model_Event $event)
     {
         // $contact = $event->contact;
         $donation = $event->donation;

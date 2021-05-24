@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_Cache {
+class CRM_Proca_Logic_Cache {
 
   const KEY_PREFIX = 'commitcivi-cache-';
 

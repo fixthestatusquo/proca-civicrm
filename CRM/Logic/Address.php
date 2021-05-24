@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_Address {
+class CRM_Proca_Logic_Address {
 
   const API_ADDRESS_GET = 'api.Address.get';
   const API_ADDRESS_CREATE = 'api.Address.create';

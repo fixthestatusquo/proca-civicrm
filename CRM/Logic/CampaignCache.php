@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_CampaignCache extends CRM_Commitcivi_Logic_Cache {
+class CRM_Proca_Logic_CampaignCache extends CRM_Proca_Logic_Cache {
 
   const TYPE_CAMPAIGN_LOCAL = 'campaign-local';
 
@@ -19,7 +19,7 @@ class CRM_Commitcivi_Logic_CampaignCache extends CRM_Commitcivi_Logic_Cache {
     if ($cache = self::get(self::TYPE_CAMPAIGN_LOCAL, $id)) {
       return $cache[self::TYPE_CAMPAIGN_LOCAL];
     }
-    $campaignObj = new CRM_Commitcivi_Logic_Campaign();
+    $campaignObj = new CRM_Proca_Logic_Campaign();
     $campaign = $campaignObj->get($id, TRUE);
     self::set(self::TYPE_CAMPAIGN_LOCAL, $id, $campaign);
     return $campaign;
@@ -38,7 +38,7 @@ class CRM_Commitcivi_Logic_CampaignCache extends CRM_Commitcivi_Logic_Cache {
     if ($cache = self::get(self::TYPE_CAMPAIGN_EXTERNAL, $params['external_identifier'])) {
       return $cache[self::TYPE_CAMPAIGN_EXTERNAL];
     }
-    $campaignObj = new CRM_Commitcivi_Logic_Campaign();
+    $campaignObj = new CRM_Proca_Logic_Campaign();
     $campaign = $campaignObj->get($params['external_identifier']);
     if (!$campaignObj->isValidCampaign($campaign)) {
       $campaign = $campaignObj->set($params);

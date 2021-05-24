@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Commitcivi_Logic_Country extends CRM_Commitcivi_Logic_Cache {
+class CRM_Proca_Logic_Country extends CRM_Proca_Logic_Cache {
 
   const TYPE_COUNTRY = 'country';
 
