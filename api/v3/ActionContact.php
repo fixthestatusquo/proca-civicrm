@@ -45,13 +45,12 @@ function _civicrm_api3_action_contact_create_spec(&$spec) {
     'title' => ts('Create date'),
     'description' => ts('Create date of event'),
     'type' => CRM_Utils_Type::T_STRING,
-    'api.required' => 1,
-    'api.default' => '',
+    'api.default' => 'now',
   ];
   $spec['action_name'] = [
     'name' => 'action_name',
     'title' => 'Action name',
-    'description' => 'Action name where last "-XX" chars determines language of campaign',
+    'description' => 'Action name WIP',
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 1,
     'api.default' => '',
@@ -69,7 +68,6 @@ function _civicrm_api3_action_contact_create_spec(&$spec) {
     'title' => ts('Campaign External ID'),
     'description' => 'Unique trusted external ID',
     'type' => CRM_Utils_Type::T_STRING,
-    'api.required' => 1,
     'api.default' => '',
   ];
   $spec['campaign_id'] = [
@@ -129,11 +127,6 @@ function civicrm_api3_action_contact_create($params) {
       'id' => '$value.address_id',
       'contact_id' => '$value.id',
     ),
-    'api.GroupContact.get' => array(
-      'group_id' => $groupId,
-      'contact_id' => '$value.id',
-      'status' => 'Added',
-    ),
     'return' => 'id,email,first_name,last_name,preferred_language,is_opt_out',
   );
 
@@ -188,18 +181,6 @@ function civicrm_api3_action_contact_create($params) {
   $tag->setLanguageTag($contactId, $language);
   if ($contactResult['preferred_language'] != $locale) {
     $contactObj->set($contactId, ['preferred_language' => $locale]);
-  }
-
-  // if the contact did not exist or is not a member, send a request for consent
-  if (count($contacIds) == 0 || $getResult['values'][$contactId]['api.GroupContact.get']['count'] == 0) {
-    $requestParams = [
-      'contact_id' => $contactId,
-      'campaign_id' => $params['campaign_id'],
-      'utm_source' => $params['utm_source'],
-      'utm_medium' => $params['utm_medium'],
-      'utm_campaign' => $params['utm_campaign'],
-    ];
-    $confResult = civicrm_api3('Gidipirus', 'send_consent_request', $requestParams);
   }
 
   return civicrm_api3_create_success($returnResult, $params);

@@ -262,10 +262,7 @@ class CRM_Proca_Logic_Contact {
    * @return string
    */
   private function determineSource($params) {
-    $prefix = 'speakout ';
-    if (strpos($params['action_technical_type'], 'cc.wemove.eu') !== FALSE) {
-      $prefix = 'commitchange ';
-    }
+    $prefix = 'proca ';
     return $prefix . $params['action_type'] . ' ' . $params['external_identifier'];
   }
 

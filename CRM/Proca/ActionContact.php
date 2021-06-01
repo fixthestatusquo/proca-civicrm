@@ -44,15 +44,13 @@ class CRM_Proca_ActionContact{
     public static function process($ctx,$data,$id) {
       $campaign = CRM_Proca_ActionContact::getCampaign($data["campaign"]);
       $private_key = Civi::settings()->get('proca_private_key');
-      //$public_key = Civi::settings()->get('proca_public_key');
-
+      $public_key = Civi::settings()->get('proca_public_key');
       $c = sodium_crypto_box_open ( base64url_decode($data['contact']['payload']),base64url_decode($data['contact']['nonce']),
         base64url_decode($private_key).base64url_decode($data['contact']['signKey']['public'])); 
       if (!$c) {
         echo "problem decryption";
         return false;
       }
-print_r($data);
       $contact = json_decode ($c,true);
       print_r($contact); 
 
