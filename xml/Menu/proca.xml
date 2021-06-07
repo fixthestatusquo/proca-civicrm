@@ -7,8 +7,20 @@
   </item>
 
   <item>
-    <path>civicrm/proca/ping</path>
-    <page_callback>CRM_Proca_Page_Ping</page_callback>
+    <path>civicrm/proca/run</path>
+    <page_callback>CRM_Proca_Page_Run</page_callback>
+    <title>Import all the contacts that have been queued</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/proca</path>
+    <page_callback>CRM_Proca_Page_Fetch</page_callback>
+    <title>Force the CRM to check for new contacts</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/proca/fetch</path>
+    <page_callback>CRM_Proca_Page_Fetch</page_callback>
     <title>Force the CRM to check for new contacts</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>

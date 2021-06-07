@@ -53,4 +53,15 @@ return array(
     'is_contact' => 0,
     'settings_pages' => ['proca' => ['weight' => 10]],
   ),
+  'proca_limit' => array(
+    'name' => 'proca_limit',
+    'type' => 'Int',
+    'html_type' => 'text',
+    'add' => '4.7',
+    'title' => ts('batch size, how many to load'),
+    'default' => 1000,
+    'is_domain' => 1,
+    'is_contact' => 0,
+    'settings_pages' => ['proca' => ['weight' => 10]],
+  ),
   );

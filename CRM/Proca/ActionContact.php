@@ -52,9 +52,30 @@ class CRM_Proca_ActionContact{
         return false;
       }
       $contact = json_decode ($c,true);
-      print_r($contact); 
+      $r =  [
+        "action_name" => $data["actionPage"]["name"],
+        "action_type" => $data["actionType"],
+        "campaign" => $data["campaign"]["name"],
+        "identifier" => $data["contact"]["contactRef"],
+        "page_id" => $data["actionPage"]["id"],
+        "locale" => $data["actionPage"]["locale"],
+        "first_name"=>$contact["first_name"],
+        "last_name"=>$contact["last_name"],
+        "created_date"=>$data["createdAt"],
+        "email"=>$contact["email"],
+        "postal_code"=>$contact["postcode"],
+        "country"=>$contact["country"]
+      ];
+      foreach ($data["fields"] as $f) {
+        $r[$f["key"]] = $f["value"];
+      }
+      try {
+        $d=civicrm_api3 ("ActionContact","create",$r);
+      } catch (Exception $e) {
+        echo $e->getMessage();
+        return false;
+      }
 
-
-    return false;
+    return true;
   }
 }

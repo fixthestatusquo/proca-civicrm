@@ -48,6 +48,15 @@ class CRM_Proca_Logic_Contact {
     }
   }
 
+  public function prepareLanguage($locale) {
+    if ($locale == "en") {
+      return "en_US"; //because 
+    }
+    if (length($locale) == 2)  {
+      return $locale . "_" . strtoupper($locale);
+    }
+  }
+
   /**
    * Preparing params for API Contact.create based on retrieved result.
    *
@@ -60,7 +69,6 @@ class CRM_Proca_Logic_Contact {
    * @return mixed
    */
   public function prepareParamsContact($params, $contact, $options, $result = array(), $basedOnContactId = 0) {
-    $locale = $options['locale'];
 
     unset($contact['return']);
     unset($contact['api.Address.get']);
@@ -78,108 +86,30 @@ class CRM_Proca_Logic_Contact {
 
     $address = new CRM_Proca_Logic_Address();
     $params['country_id'] = CRM_Proca_Logic_Country::getId($params['country']);
-
     if (is_array($existingContact) && count($existingContact) > 0) {
       $contact['id'] = $existingContact['id'];
-      if ($existingContact['first_name'] == '' && $params['firstname']) {
-        $contact['first_name'] = $params['firstname'];
+      if ($existingContact['first_name'] == '' && $params['first_name']) {
+        $contact['first_name'] = $params['first_name'];
       }
-      if ($existingContact['last_name'] == '' && $params['lastname']) {
-        $lastname = $this->cleanLastname($params['lastname']);
-        if ($lastname) {
-          $contact['last_name'] = $lastname;
-        }
+      if ($existingContact['last_name'] == '' && $params['last_name']) {
+        $contact['last_name'] = $params['last_name'];
       }
       $contact = $address->prepareParamsAddress($contact, $existingContact, $params);
     }
     else {
-      $genderId = $this->getGenderId($params['lastname']);
-      $genderShortcut = $this->getGenderShortcut($params['lastname']);
-      $lastname = $this->cleanLastname($params['lastname']);
-      $contact['first_name'] = $params['firstname'];
-      $contact['last_name'] = $lastname;
-      $contact['gender_id'] = $genderId;
-      $contact['prefix_id'] = $this->getPrefix($genderShortcut);
-      $emailGreetingIds = $this->parseGroupEmailGreeting();
-      $emailGreetingId = $this->getEmailGreetingId($locale, $genderShortcut, $emailGreetingIds);
-      if ($emailGreetingId) {
-        $contact['email_greeting_id'] = $emailGreetingId;
-      }
-      $contact['preferred_language'] = $locale;
+//      $genderId = $this->getGenderId($params['last_name']);
+//      $genderShortcut = $this->getGenderShortcut($params['last_name']);
+      $contact['first_name'] = $params['first_name'];
+      $contact['last_name'] = $params['last_name'];
+      $contact['external_identifier'] = $params["identifier"];
       $contact['source'] = $this->determineSource($params);
       $contact = $address->prepareParamsAddressDefault($contact, $params);
     }
+    $contact['preferred_language'] = $this->prepareLanguage($params["locale"]);
     $contact = $address->removeNullAddress($contact);
     return $contact;
   }
 
-  /**
-   * Clean lastname from gender
-   *
-   * @param $lastname
-   *
-   * @return mixed
-   */
-  public function cleanLastname($lastname) {
-    $re = "/(.*)(\\[.*\\])$/";
-    return trim(preg_replace($re, '${1}', $lastname));
-  }
-
-  /**
-   * Get gender id based on lastname. Format: Lastname [?], M -> Male, F -> Femail, others -> Unspecific
-   *
-   * @param $lastname
-   *
-   * @return int
-   */
-  private function getGenderId($lastname) {
-    $genderFemaleValue = CRM_Core_PseudoConstant::getKey('CRM_Contact_BAO_Contact', 'gender_id', 'Female');
-    $genderMaleValue = CRM_Core_PseudoConstant::getKey('CRM_Contact_BAO_Contact', 'gender_id', 'Male');
-    $genderUnspecifiedValue = CRM_Core_PseudoConstant::getKey('CRM_Contact_BAO_Contact', 'gender_id', 'unspecified');
-    $re = '/.*\[([FM])\]$/';
-    if (preg_match($re, $lastname, $matches)) {
-      switch ($matches[1]) {
-        case 'F':
-          return $genderFemaleValue;
-
-        case 'M':
-          return $genderMaleValue;
-
-        default:
-          return $genderUnspecifiedValue;
-      }
-    }
-    return $genderUnspecifiedValue;
-  }
-
-  /**
-   * Get gender shortcut based on lastname. Format: Lastname [?], M -> Male, F -> Femail, others -> Unspecific
-   *
-   * @param $lastname
-   *
-   * @return string
-   */
-  private function getGenderShortcut($lastname) {
-    $re = '/.*\[([FM])\]$/';
-    if (preg_match($re, $lastname, $matches)) {
-      return $matches[1];
-    }
-    return '';
-  }
-
-  /**
-   * Get prefix based on gender (F or M)
-   * @param string $genderShortcut
-   *
-   * @return string
-   */
-  private function getPrefix($genderShortcut) {
-    $array = array(
-      'F' => 'Mrs.',
-      'M' => 'Mr.',
-    );
-    return CRM_Utils_Array::value($genderShortcut, $array, '');
-  }
 
   /**
    * Calculate and glue similarity between new contact and all retrieved from database
@@ -263,62 +193,8 @@ class CRM_Proca_Logic_Contact {
    */
   private function determineSource($params) {
     $prefix = 'proca ';
-    return $prefix . $params['action_type'] . ' ' . $params['external_identifier'];
+    return $prefix . $params['action_type'] . ' ' . $params['campaign'] . ' #'.$params['page_id'];
   }
 
-
-  /**
-   * Parse all email greeting types in array of locale and gender shortcut
-   */
-  public function parseGroupEmailGreeting() {
-    $emailGreetingIds = [];
-    CRM_Core_OptionGroup::getAssoc('email_greeting', $group, FALSE, 'name');
-    foreach ($group['description'] as $id => $description) {
-      $tab = $this->parseLocaleGenderShortcut($description);
-      if (is_array($tab) && count($tab) == 2) {
-        $emailGreetingIds[$tab['locale']][$tab['genderShortcut']] = $id;
-      }
-    }
-    return $emailGreetingIds;
-  }
-  /**
-   * Parse description of email greeting type in array of locale and gender shortcut
-   * @param string $description description of email greeting type in format [locale]:[genderShortcut] ex. fr_FR:M
-   *
-   * @return array
-   */
-  public function parseLocaleGenderShortcut($description) {
-    $re = '/^([a-z]{2,3}_[A-Z]{2})\:(.{0,1})/';
-    if (preg_match($re, $description, $matches)) {
-      return [
-        'locale' => $matches[1],
-        'genderShortcut' => $matches[2],
-      ];
-    }
-    return [];
-  }
-
-
-  /**
-   * Get email greeting Id for locale and gender shortcut
-   *
-   * @param string $locale
-   * @param string $genderShortcut
-   * @param array $emailGreetingIds
-   *
-   * @return int
-   */
-  public function getEmailGreetingId($locale, $genderShortcut, $emailGreetingIds) {
-    if (array_key_exists($locale, $emailGreetingIds)) {
-      if (
-        array_key_exists($genderShortcut, $emailGreetingIds[$locale]) &&
-        $emailGreetingIds[$locale][$genderShortcut] > 0
-      ) {
-        return $emailGreetingIds[$locale][$genderShortcut];
-      }
-      return $emailGreetingIds[$locale][''];
-    }
-    return 0;
-  }
 
 }

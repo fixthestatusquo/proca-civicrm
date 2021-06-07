@@ -2,7 +2,7 @@
 
 class CRM_Proca_Logic_Cache {
 
-  const KEY_PREFIX = 'commitcivi-cache-';
+  const KEY_PREFIX = 'proca-cache-';
 
   private static $dateFormat = 'YmdHis';
 

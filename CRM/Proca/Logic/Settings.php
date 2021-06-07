@@ -2,9 +2,9 @@
 
 class CRM_Proca_Logic_Settings {
 
-  const CACHE_PREFIX = 'eu.wemove.commitcharge';
-  const PAYMENT_PROCESSOR_CARD = 'CommitChange-card';
-  const PAYMENT_PROCESSOR_SEPA = 'CommitChange-sepa';
+  const CACHE_PREFIX = 'proca';
+  const PAYMENT_PROCESSOR_CARD = 'proca-card';
+  const PAYMENT_PROCESSOR_SEPA = 'proca-sepa';
 
   /**
    * Get id of Members group.

@@ -13,7 +13,7 @@ class CRM_Proca_Page_Import extends CRM_Core_Page {
   ));
 
   $mode = 
-    CRM_Utils_Request::retrieve('mode', 'String') === 'abort' 
+    CRM_Utils_Request::retrieve('mode', 'String') !== 'continue' 
     ? CRM_Queue_Runner::ERROR_ABORT
     : CRM_Queue_Runner::ERROR_CONTINUE;
 
@@ -28,7 +28,8 @@ class CRM_Proca_Page_Import extends CRM_Core_Page {
 
   while(time() < $maxRunTime && $continue) {
     $result = $runner->runNext(false);
-    if (!$result['is_continue']) {
+    $this->assign('result',json_encode($result,JSON_PRETTY_PRINT)); 
+    if (!$result['is_continue'] || CRM_Utils_Request::retrieve('mode', 'String') !== 'continue') {
       $continue = false; //all items in the queue are processed
     }
     $returnValues[] = $result;
