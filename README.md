@@ -37,4 +37,4 @@ The configuration screen is under civicrm/admin/setting/proca
 
 ## Known Issues
 
-(* FIXME *)
+We test for duplicates of contacts, we don't test for duplicates of activities
