@@ -25,12 +25,11 @@ function _civicrm_api3_action_contact_Sync_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_action_contact_Sync($params) {
-  const QUEUE_NAME = 'proca';
+  $QUEUE_NAME = 'proca';
 
-  function run() {
     $queue = CRM_Queue_Service::singleton()->create([
       'type' => 'Sql',
-      'name' => self::QUEUE_NAME,
+      'name' => $QUEUE_NAME,
       'reset' => FALSE,
     ]);
 
@@ -41,11 +40,11 @@ function civicrm_api3_action_contact_Sync($params) {
 //      'onEnd' => ['CRM_Proca_Page_Run', 'onEnd'],
 //      'onEndUrl' => CRM_Utils_System::url('civicrm/proca/run'),
     ]);
-    $runner->runAll(); // does not return
-
+    $queueResult = $runner->runAll(); 
+    if ($queueResult !== TRUE) {
+      $errorMessage = CRM_Core_Error::formatTextException($queueResult['exception']);
+      CRM_Core_Error::debug_log_message($errorMessage);
+      throw new API_Exception($errorMessage, 'sync error');
+    }
     return civicrm_api3_create_success($returnValues, $params, 'ActionContact', 'Sync');
-  }
-  else {
-    throw new API_Exception(/*error_message*/ 'check the log', /*error_code*/ 'sync error');
-  }
 }
