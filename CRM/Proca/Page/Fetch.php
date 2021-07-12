@@ -3,9 +3,9 @@ use CRM_Proca_ExtensionUtil as E;
 
 class CRM_Proca_Page_Fetch extends CRM_Core_Page {
   const QUEUE_NAME = 'proca';
-  var int $last=0;
-  var int $processed=0;
-  var bool $fetch = false;
+  var $last=0;
+  var $processed=0;
+  var $fetch = false;
 
   function __construct() {
     parent::__construct();
@@ -24,6 +24,39 @@ class CRM_Proca_Page_Fetch extends CRM_Core_Page {
      parent::run();
 
   }
+
+function remove_emoji($string)
+{
+    // Match Enclosed Alphanumeric Supplement
+    $regex_alphanumeric = '/[\x{1F100}-\x{1F1FF}]/u';
+    $clear_string = preg_replace($regex_alphanumeric, '[emoji]', $string);
+
+    // Match Miscellaneous Symbols and Pictographs
+    $regex_symbols = '/[\x{1F300}-\x{1F5FF}]/u';
+    $clear_string = preg_replace($regex_symbols, '[emoji]', $clear_string);
+
+    // Match Emoticons
+    $regex_emoticons = '/[\x{1F600}-\x{1F64F}]/u';
+    $clear_string = preg_replace($regex_emoticons, '[emoji]', $clear_string);
+
+    // Match Transport And Map Symbols
+    $regex_transport = '/[\x{1F680}-\x{1F6FF}]/u';
+    $clear_string = preg_replace($regex_transport, '[emoji]', $clear_string);
+    
+    // Match Supplemental Symbols and Pictographs
+    $regex_supplemental = '/[\x{1F900}-\x{1F9FF}]/u';
+    $clear_string = preg_replace($regex_supplemental, '[emoji]', $clear_string);
+
+    // Match Miscellaneous Symbols
+    $regex_misc = '/[\x{2600}-\x{26FF}]/u';
+    $clear_string = preg_replace($regex_misc, '[emoji]', $clear_string);
+
+    // Match Dingbats
+    $regex_dingbats = '/[\x{2700}-\x{27BF}]/u';
+    $clear_string = preg_replace($regex_dingbats, '[emoji]', $clear_string);
+
+    return $clear_string;
+}
 
   function fetch () {
     // $encrypted = Civi::service('crypto.token')->encrypt('t0ps3cr37', 'CRED');
@@ -48,12 +81,16 @@ catch (CiviCRM_API3_Exception $e) {
 foreach ($contacts["values"] as $contact) {
   $this->last=$contact["actionId"];
 
-
+try {
 $task = $queue->createItem(new CRM_Queue_Task(
   ['CRM_Proca_ActionContact', 'process'], // callback
   [$contact,$contact["actionId"]], // needs to be an array, if object gets flattened
 ts("import from proca ") . $contact["actionId"] . "-" . $contact["actionType"] // title
 ));
+
+} catch (Exception $e) {
+echo "aaaaaa".$e->getMessage();
+}
  
 
 }
