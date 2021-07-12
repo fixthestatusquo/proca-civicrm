@@ -40,8 +40,16 @@ function _civicrm_api3_action_contact_create_spec(&$spec) {
     'api.required' => 0,
     'api.default' => '',
   ];
-  $spec['create_dt'] = [
-    'name' => 'create_dt',
+  $spec['phone'] = [
+    'name' => 'phone',
+    'title' => ts('Phone'),
+    'description' => 'Phone',
+    'type' => CRM_Utils_Type::T_STRING,
+    'api.required' => 0,
+    'api.default' => '',
+  ];
+  $spec['created_date'] = [
+    'name' => 'created_date',
     'title' => ts('Create date'),
     'description' => ts('Create date of event'),
     'type' => CRM_Utils_Type::T_STRING,

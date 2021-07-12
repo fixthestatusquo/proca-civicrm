@@ -41,7 +41,8 @@ class CRM_Proca_ActionContact{
    */
 
   
-    public static function process($ctx,$data,$id) {
+  public static function process($ctx,$data,$id) {
+
       $campaign = CRM_Proca_ActionContact::getCampaign($data["campaign"]);
       $private_key = Civi::settings()->get('proca_private_key');
       $public_key = Civi::settings()->get('proca_public_key');
@@ -69,7 +70,14 @@ class CRM_Proca_ActionContact{
         "postcode" => "postal_code",
         "country" => "country",
         "email" => "email",
+        "phone" => "phone",
       ];
+      foreach ($fields as $in => $out) { // any custom field?
+        foreach ($data['fields'] as $custom) {
+          if ($custom['key'] == $in)
+            $r[$out] = $custom['value'];
+        }
+      }
       foreach ($fields as $in => $out) {
         if (!array_key_exists ($in, $contact)) continue;
         $r[$out] = $contact[$in];

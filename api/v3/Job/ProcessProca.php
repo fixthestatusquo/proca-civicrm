@@ -1,21 +1,21 @@
 <?php
-use CRM_Inlaypetition_ExtensionUtil as E;
-
 /**
- * Job.Processpetitioninlays API specification (optional)
  * This is used for documentation and validation.
  *
  * @param array $spec description of fields supported by this API call
  *
  * @see https://docs.civicrm.org/dev/en/latest/framework/api-architecture/
  */
-function _civicrm_api3_job_ProcessProca_spec(&$spec) {
+function _civicrm_api3_job_process_proca_spec(&$spec) {
   $spec['max_time']['api.default'] = 0;
   $spec['max_time']['description'] = 'Stop procesing after this many seconds. Zero means stop when all done.';
+  $spec['fetch']['api.default'] = true;
+  $spec['fetch']['api.description'] = 'fetch a batch of contacts and queue them';
+  $spec['process']['api.default'] = true;
+  $spec['process']['api.description'] = 'process the queue and create the contacts';
 }
 
 /**
- * Job.Processpetitioninlays API
  *
  * @param array $params
  *
@@ -26,8 +26,9 @@ function _civicrm_api3_job_ProcessProca_spec(&$spec) {
  *
  * @throws API_Exception
  */
-function civicrm_api3_job_ProcessProca($params) {
+function civicrm_api3_job_process_proca($params) {
 
+    $QUEUE_NAME = 'proca';
   if (($params['max_time'] ?? 0) == 0) {
     $stopAt = NULL;
   }
@@ -35,7 +36,14 @@ function civicrm_api3_job_ProcessProca($params) {
     $stopAt = time() + (int) $params['max_time'];
   }
 
-  $queue = \Civi\Inlay\Petition::getQueueService();
+
+    $queue = CRM_Queue_Service::singleton()->create([
+      'type' => 'Sql',
+      'name' => $QUEUE_NAME,
+      'reset' => FALSE,
+    ]);
+
+
   $runner = new CRM_Queue_Runner([
     'title' => ts('Process petition signatures'),
     'queue' => $queue,
@@ -67,5 +75,5 @@ function civicrm_api3_job_ProcessProca($params) {
     }
   } while (!$stopAt || time() < $stopAt);
 
-  return civicrm_api3_create_success(['processed' => $processed], $params, 'Job', 'Processpetitioninlays');
+  return civicrm_api3_create_success(['processed' => $processed], $params, 'Job', 'process_proca');
 }
