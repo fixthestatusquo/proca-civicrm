@@ -52,7 +52,7 @@ class CRM_Proca_Logic_Contact {
     if ($locale == "en") {
       return "en_US"; //because 
     }
-    if (length($locale) == 2)  {
+    if (strlen($locale) == 2)  {
       return $locale . "_" . strtoupper($locale);
     }
   }

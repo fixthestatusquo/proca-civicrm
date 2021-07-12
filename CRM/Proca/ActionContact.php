@@ -59,13 +59,21 @@ class CRM_Proca_ActionContact{
         "identifier" => $data["contact"]["contactRef"],
         "page_id" => $data["actionPage"]["id"],
         "locale" => $data["actionPage"]["locale"],
-        "first_name"=>$contact["first_name"],
-        "last_name"=>$contact["last_name"],
-        "created_date"=>$data["createdAt"],
-        "email"=>$contact["email"],
-        "postal_code"=>$contact["postcode"],
-        "country"=>$contact["country"]
+        "created_date"=>$data["createdAt"]
       ];
+      $fields = [
+        "first_name" => "first_name",
+        "firstName" => "first_name",
+        "lastName" => "last_name",
+        "last_name" => "last_name",
+        "postcode" => "postal_code",
+        "country" => "country",
+        "email" => "email",
+      ];
+      foreach ($fields as $in => $out) {
+        if (!array_key_exists ($in, $contact)) continue;
+        $r[$out] = $contact[$in];
+      }
       foreach ($data["fields"] as $f) {
         $r[$f["key"]] = $f["value"];
       }
