@@ -4,6 +4,9 @@
      <path>civicrm/admin/setting/proca</path>
      <title>Proca Settings</title>
      <page_callback>CRM_Admin_Form_Generic</page_callback>
+    <access_arguments>administer CiviCRM</access_arguments>
+    <desc>Configure the settings of your proca integration</desc>
+    <adminGroup>CiviCampaign</adminGroup>
   </item>
 
   <item>

@@ -27,7 +27,9 @@ class CRM_Proca_Page_Import extends CRM_Core_Page {
   $continue = TRUE;
 
   while(time() < $maxRunTime && $continue) {
-    $result = $runner->runNext(false);
+	  $result = $runner->runNext(false);
+	  if ($result['is_error'])
+	$result['error']=  $result['exception']->getMessage();
     $this->assign('result',json_encode($result,JSON_PRETTY_PRINT)); 
     if (!$result['is_continue'] || CRM_Utils_Request::retrieve('mode', 'String') !== 'continue') {
       $continue = false; //all items in the queue are processed

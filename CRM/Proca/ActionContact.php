@@ -1,5 +1,6 @@
 <?php
 
+
 function base64url_decode ($data) {
    return base64_decode(strtr($data, '-_', '+/'),'strict');
    return base64_decode(str_replace(['-','_'], ['+','/'], $data));
@@ -42,17 +43,20 @@ class CRM_Proca_ActionContact{
 
   
   public static function process($ctx,$data,$id) {
-
       $campaign = CRM_Proca_ActionContact::getCampaign($data["campaign"]);
       $private_key = Civi::settings()->get('proca_private_key');
       $public_key = Civi::settings()->get('proca_public_key');
-      $c = sodium_crypto_box_open ( base64url_decode($data['contact']['payload']),base64url_decode($data['contact']['nonce']),
+      if ($data['contact']['nonce']) {
+        $c = sodium_crypto_box_open ( base64url_decode($data['contact']['payload']),base64url_decode($data['contact']['nonce']),
         base64url_decode($private_key).base64url_decode($data['contact']['signKey']['public'])); 
-      if (!$c) {
-        echo "problem decryption";
-        return false;
+        if (!$c) {
+          echo "problem decryption";
+          return false;
+        }
+        $contact = json_decode ($c,true);
+      } else {
+	$contact = json_decode ($data['contact']['payload'],true);
       }
-      $contact = json_decode ($c,true);
       $r =  [
         "action_name" => $data["actionPage"]["name"],
         "action_type" => $data["actionType"],
@@ -71,7 +75,8 @@ class CRM_Proca_ActionContact{
         "country" => "country",
         "email" => "email",
         "phone" => "phone",
-      ];
+];
+      print_r($contact);
       foreach ($fields as $in => $out) { // any custom field?
         foreach ($data['fields'] as $custom) {
           if ($custom['key'] == $in)
@@ -85,6 +90,7 @@ class CRM_Proca_ActionContact{
       foreach ($data["fields"] as $f) {
         $r[$f["key"]] = $f["value"];
       }
+      print_r($r);
       try {
         $d=civicrm_api3 ("ActionContact","create",$r);
       } catch (Exception $e) {
