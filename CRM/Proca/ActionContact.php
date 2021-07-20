@@ -76,7 +76,6 @@ class CRM_Proca_ActionContact{
         "email" => "email",
         "phone" => "phone",
 ];
-      print_r($contact);
       foreach ($fields as $in => $out) { // any custom field?
         foreach ($data['fields'] as $custom) {
           if ($custom['key'] == $in)
@@ -90,7 +89,6 @@ class CRM_Proca_ActionContact{
       foreach ($data["fields"] as $f) {
         $r[$f["key"]] = $f["value"];
       }
-      print_r($r);
       try {
         $d=civicrm_api3 ("ActionContact","create",$r);
       } catch (Exception $e) {

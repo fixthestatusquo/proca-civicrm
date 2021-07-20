@@ -12,7 +12,7 @@ class CRM_Proca_Logic_Campaign {
    * @return array
    * @throws \CiviCRM_API3_Exception
    */
-  public function get($id, $useLocalId = FALSE, $countActivities = TRUE) {
+  public function get($id, $useLocalId = FALSE, $countActivities = FALSE) {
     if ($id) {
       if ($useLocalId) {
         $field = 'id';
@@ -52,9 +52,7 @@ class CRM_Proca_Logic_Campaign {
       'title' => $params['action_name'],
       'description' => $params['action_name'],
       'external_identifier' => $params['external_identifier'],
-      'campaign_type_id' => $params['campaign_type_id'],
-      'start_date' => date('Y-m-d H:i:s'),
-      CRM_Proca_Logic_Settings::fieldLanguage() => $this->determineLanguage($params['action_name']),
+      'start_date' => date('Y-m-d H:i:s')
     );
     $result = civicrm_api3('Campaign', 'create', $params);
     return $result['values'][0];
@@ -77,24 +75,32 @@ class CRM_Proca_Logic_Campaign {
     }
     return FALSE;
   }
-
-  /**
-   * Determine language (locale) based on campaign name which have to include country on the end, ex. *_EN.
-   *
-   * @param $campaignName
-   *
-   * @return string
-   */
-  public function determineLanguage($campaignName) {
-    $re = "/(.*)[_\\- ]([a-zA-Z]{2})$/";
-    if (preg_match($re, $campaignName, $matches)) {
-      $country = strtoupper($matches[2]);
-      $countryLangMapping = CRM_Proca_Logic_Settings::countryLanguageMapping();
-      if (array_key_exists($country, $countryLangMapping)) {
-        return $countryLangMapping[$country];
+  
+  public function getOrCreateCampaign($ActionContact) {
+    $key = "WeAct:ActionPage:{$action->externalSystem}:{$action->actionPageId}";
+    $entry = Civi::cache()->get($key);
+    if (!$entry) {
+      $external_id = $this->externalIdentifier($action->externalSystem, $action->actionPageId);
+      $get_params = ['sequential' => 1, 'external_identifier' => $external_id];
+      $get_result = civicrm_api3('Campaign', 'get', $get_params);
+      if ($get_result['count'] == 1) {
+        $entry = $get_result['values'][0];
       }
+      else {
+        $create_result = civicrm_api3('Campaign', 'create', [
+          'sequential' => 1,
+          'name' => $action->actionPageName,
+          'title' => $action->actionPageName,
+          'description' => $action->actionPageName,
+          'external_identifier' => $external_id,
+          'campaign_type_id' => $this->campaignType($action->actionType),
+          'start_date' => date('Y-m-d H:i:s'),
+          $this->settings->customFields['campaign_language'] => $action->language,
+        ]);
+        $entry = $create_result['values'][0];
+      }
+      Civi::cache()->set($key, $entry);
     }
-    return CRM_Proca_Logic_Settings::defaultLanguage();
+    return $entry;
   }
-
 }

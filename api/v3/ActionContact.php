@@ -261,6 +261,7 @@ function civicrm_api3_action_contact_create($params) {
     $d=civicrm_api3 ("Activity","create",$activity);
 
   }
+
   $contactResult["api.activity.create"]=$d;
-  return civicrm_api3_create_success($contactResult, $params);
+  return civicrm_api3_create_success([$contactResult['id'] => $contactResult], $params);
 }
