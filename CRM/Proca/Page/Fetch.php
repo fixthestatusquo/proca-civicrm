@@ -22,6 +22,14 @@ class CRM_Proca_Page_Fetch extends CRM_Core_Page
         if ($this->fetch) {
             $this->fetch();
         }
+        $unprocessed = civicrm_api3('QueueItem', 'getcount', ['queue_name' => "proca"]);
+    $latestActivities = civicrm_api3('Activity', 'get', [
+      'sequential' => 1,
+      'location' => ['LIKE' => "proca%"],
+      'options' => ['sort' => "id desc"],
+    ]);
+        $this->assign("activities", $latestActivities["values"]);
+        $this->assign("unprocessed", $unprocessed);
         $this->assign("fetched", $this->processed);
         $this->assign("lastid", $this->last);
 

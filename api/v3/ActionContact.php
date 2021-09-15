@@ -78,19 +78,11 @@ function _civicrm_api3_action_contact_create_spec(&$spec) {
     'type' => CRM_Utils_Type::T_STRING,
     'api.default' => '',
   ];
-  $spec['campaign_name'] = [
+  $spec['campaign'] = [
     'name' => 'campaign_name',
     'title' => ts('Campaign External ID'),
     'description' => 'Unique campaign name',
     'type' => CRM_Utils_Type::T_STRING,
-    'api.default' => '',
-  ];
-  $spec['campaign_id'] = [
-    'name' => 'campaign_id',
-    'title' => ts('Campaign ID'),
-    'description' => 'CiviCRM Campaign ID',
-    'type' => CRM_Utils_Type::T_INT,
-    'api.required' => 0,
     'api.default' => '',
   ];
   $spec['utm_source'] = [
@@ -239,13 +231,16 @@ function civicrm_api3_action_contact_create($params) {
     "activity_date_time" => $params["created_date"],
     "subject" => $params["action_name"],
     "details" => '',
+    "campaign_id" => $params["campaign"],
     "location" => "proca page#" . $params ["page_id"]
   ];
-  if (in_array("comment",$activity))
+  if (in_array("comment",$params))
     $activity["details"] = $params["comment"];
+
 
   try {
     $d=civicrm_api3 ("Activity","create",$activity);
+    print_r($d);exit(1);
   } catch (Exception $e) {
     	
 
