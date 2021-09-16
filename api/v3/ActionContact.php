@@ -55,6 +55,13 @@ function _civicrm_api3_action_contact_create_spec(&$spec) {
     'type' => CRM_Utils_Type::T_STRING,
     'api.default' => 'now',
   ];
+  $spec['action_id'] = [
+    'name' => 'action_id',
+    'title' => ts('action External ID'),
+    'description' => 'Unique action id',
+    'type' => CRM_Utils_Type::T_INT,
+    'api.default' => '',
+  ];
   $spec['action_name'] = [
     'name' => 'action_name',
     'title' => 'Action name',
@@ -78,9 +85,16 @@ function _civicrm_api3_action_contact_create_spec(&$spec) {
     'type' => CRM_Utils_Type::T_STRING,
     'api.default' => '',
   ];
+  $spec['campaign_id'] = [
+    'name' => 'campaign_id',
+    'title' => ts('Campaign External ID'),
+    'description' => 'Unique campaign id',
+    'type' => CRM_Utils_Type::T_INT,
+    'api.default' => '',
+  ];
   $spec['campaign'] = [
     'name' => 'campaign_name',
-    'title' => ts('Campaign External ID'),
+    'title' => ts('Campaign name'),
     'description' => 'Unique campaign name',
     'type' => CRM_Utils_Type::T_STRING,
     'api.default' => '',
@@ -226,6 +240,7 @@ function civicrm_api3_action_contact_create($params) {
   $activity = [
     "sequential" => 1,
     "is_transactional" => false,
+    "source_record_id" => $params["action_id"],
     "source_contact_id" => $contactResult["id"],
     "activity_type_id" => $params["action_type"],
     "activity_date_time" => $params["created_date"],
@@ -240,7 +255,6 @@ function civicrm_api3_action_contact_create($params) {
 
   try {
     $d=civicrm_api3 ("Activity","create",$activity);
-    print_r($d);exit(1);
   } catch (Exception $e) {
     	
 
