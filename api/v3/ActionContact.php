@@ -246,7 +246,7 @@ function civicrm_api3_action_contact_create($params) {
     "activity_date_time" => $params["created_date"],
     "subject" => $params["action_name"],
     "details" => '',
-    "campaign_id" => $params["campaign"],
+    "campaign_id" => $params["campaign_id"] ? $params["campaign_id"] : $params["campaign"],
     "location" => "proca page#" . $params ["page_id"]
   ];
   if (in_array("comment",$params))

@@ -11,20 +11,22 @@
 <button>Fetch more</button>
 </form>
 
-
 <h3>Latest actions processed</h3>
 <table>
 <thead>
 <th>date</th>
+<th>action</th>
 <th>contact</th>
-<th>type</th>
-<th>Subject</th>
+<th>Campaign</th>
+<th>Page</th>
 </thead>
 {foreach from=$activities item=action}
 <tbody>
 <tr>
 <th>{$action.activity_date_time}</th>
+<th>{$action.activity_type_id_name}</th>
 <th><a href="{crmURL p='civicrm/contact/view' q="reset=1&cid=`$action.source_contact_id`"}">{$action.source_contact_name}</a></th>
+<th>{$action.campaign_id_name}</th>
 <th>{$action.subject}</th>
 </tr>
 {/foreach}

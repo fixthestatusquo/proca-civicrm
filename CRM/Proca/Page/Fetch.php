@@ -25,9 +25,16 @@ class CRM_Proca_Page_Fetch extends CRM_Core_Page
         $unprocessed = civicrm_api3('QueueItem', 'getcount', ['queue_name' => "proca"]);
     $latestActivities = civicrm_api3('Activity', 'get', [
       'sequential' => 1,
+      'return' => ['activity_date_time', 'subject', "source_record_id", "campaign_id.name", "activity_type_id.name"],
       'location' => ['LIKE' => "proca%"],
       'options' => ['sort' => "id desc"],
     ]);
+        foreach($latestActivities["values"] as $i => $a) {
+          foreach($a as $key => $value) {
+          $a[str_replace('.','_',$key)] = $value;
+          }
+          $latestActivities["values"][$i]=$a;
+        }
         $this->assign("activities", $latestActivities["values"]);
         $this->assign("unprocessed", $unprocessed);
         $this->assign("fetched", $this->processed);

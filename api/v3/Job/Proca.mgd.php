@@ -5,15 +5,15 @@
 // https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_managed
 return [
   [
-    'name' => 'CronProcessProca',
+    'name' => 'CronProca',
     'entity' => 'Job',
     'params' => [
       'version' => 3,
-      'name' => 'Call Job.ProcessProca API',
-      'description' => 'Process the queue of campaign actions',
-      'run_frequency' => 'Always',
+      'name' => 'Call Job.Proca API',
+      'description' => 'Add the actions taken on proca to your CiviCRM',
+      'run_frequency' => 'Daily',
       'api_entity' => 'Job',
-      'api_action' => 'ProcessProca',
+      'api_action' => 'Proca',
       'parameters' => '',
     ],
   ],

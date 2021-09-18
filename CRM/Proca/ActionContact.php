@@ -57,13 +57,12 @@ class CRM_Proca_ActionContact{
       } else {
 	$contact = json_decode ($data['contact']['payload'],true);
       }
-      print_r($campaign);exit(1);
       $r =  [
         "action_id" => $data["actionId"],
         "action_name" => $data["actionPage"]["name"],
         "action_type" => $data["actionType"],
-        "campaign" => $data["campaign"]["name"],
-        "campaign_id" => $data["campaign"]["campaign"]["id"],
+//        "campaign" => $data["campaign"]["name"],
+        "campaign" => $campaign["id"],
         "identifier" => $data["contact"]["contactRef"],
         "page_id" => $data["actionPage"]["id"],
         "locale" => $data["actionPage"]["locale"],

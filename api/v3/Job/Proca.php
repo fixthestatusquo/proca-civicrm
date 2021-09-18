@@ -6,7 +6,7 @@
  *
  * @see https://docs.civicrm.org/dev/en/latest/framework/api-architecture/
  */
-function _civicrm_api3_job_process_proca_spec(&$spec)
+function _civicrm_api3_job_proca_spec(&$spec)
 {
   $spec["max_time"]["api.default"] = 0;
   $spec["max_time"]["description"] =
@@ -30,7 +30,7 @@ function _civicrm_api3_job_process_proca_spec(&$spec)
  *
  * @throws API_Exception
  */
-function civicrm_api3_job_process_proca($params)
+function civicrm_api3_job_proca($params)
 {
   $QUEUE_NAME = "proca";
   $fetched = 0;
