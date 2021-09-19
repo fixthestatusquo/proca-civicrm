@@ -253,7 +253,7 @@ function civicrm_api3_action_contact_create($params) {
     $activity["details"] = $params["comment"];
   
   if (!$createParams["id"]) {
-    $activity["status_id"] ="completed_new_contact";
+    $activity["status_id"] ="completed_new_member";
   }
 
   try {
