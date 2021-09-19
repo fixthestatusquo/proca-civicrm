@@ -1,7 +1,7 @@
 <?php
 use CRM_Proca_ExtensionUtil as E;
 
-class CRM_Proca_Page_Fetch extends CRM_Core_Page
+class CRM_Proca_Page_Dashboard extends CRM_Core_Page
 {
     const QUEUE_NAME = "proca";
     var $last = 0;

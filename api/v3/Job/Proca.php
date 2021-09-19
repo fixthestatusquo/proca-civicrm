@@ -8,6 +8,8 @@
  */
 function _civicrm_api3_job_proca_spec(&$spec)
 {
+  $spec["limit"]["description"] =
+    "How many records to fetch or process?";
   $spec["max_time"]["api.default"] = 0;
   $spec["max_time"]["description"] =
     "Stop procesing after this many seconds. Zero means stop when all done.";
@@ -89,7 +91,7 @@ function civicrm_api3_job_proca($params)
     $fetchBatch([
       "queue" => $queue,
       "org" => Civi::settings()->get("proca_org"),
-      "limit" => 0 + Civi::settings()->get("proca_limit"),
+      "limit" => 0 + ($params["limit"] ? $params["limit"] : Civi::settings()->get("proca_limit")),
       "last" => Civi::settings()->get("proca_lastid"),
     ]);
     //$next=0;
@@ -121,7 +123,9 @@ function civicrm_api3_job_proca($params)
       }
 
       $processed++;
-
+      if ($params["limit"] && ($processed >= $params["limit"]))
+        $stopAt = time() -1;
+      
       if (!$result["is_continue"]) {
         break; //all items in the queue are processed, or one failed.
       }

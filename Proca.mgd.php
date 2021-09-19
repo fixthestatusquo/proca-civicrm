@@ -5,6 +5,16 @@
 // https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_managed
 return [
   [
+    'name' => 'CompletedNewMember',
+    'entity' => 'OptionValue',
+    'params' => [
+      'version' => 3,
+      'option_group_id' => "activity_status",
+      'name' => 'completed_new_member',
+      'label' => 'Completed new member',
+      'is_reserved' => 1
+    ],
+  ],[
     'name' => 'CronProca',
     'entity' => 'Job',
     'params' => [

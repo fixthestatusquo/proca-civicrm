@@ -17,8 +17,8 @@
   </item>
   <item>
     <path>civicrm/proca</path>
-    <page_callback>CRM_Proca_Page_Fetch</page_callback>
-    <title>Force the CRM to check for new contacts</title>
+    <page_callback>CRM_Proca_Page_Dashboard</page_callback>
+    <title>Configure integration with your online campaigns</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
@@ -28,8 +28,8 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
-    <path>civicrm/proca/import</path>
-    <page_callback>CRM_Proca_Page_Import</page_callback>
+    <path>civicrm/proca/test</path>
+    <page_callback>CRM_Proca_Page_test</page_callback>
     <title>Import actions</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
