@@ -251,7 +251,10 @@ function civicrm_api3_action_contact_create($params) {
   ];
   if (in_array("comment",$params))
     $activity["details"] = $params["comment"];
-
+  
+  if (!$createParams["id"]) {
+    $activity["status_id"] ="completed_new_contact";
+  }
 
   try {
     $d=civicrm_api3 ("Activity","create",$activity);
@@ -268,7 +271,6 @@ function civicrm_api3_action_contact_create($params) {
       return civicrm_api3_create_error($e>-getMessage(), $params);
     }
     $d=civicrm_api3 ("Activity","create",$activity);
-
   }
 
   $contactResult["api.activity.create"]=$d;
