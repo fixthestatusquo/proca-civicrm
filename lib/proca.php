@@ -28,7 +28,6 @@ $query = 'query actions ($org:String!,$limit:Int,$start:Int,$campaign:Int) {
     )
 );
 
-print_r($params);
   if (array_key_exists('campaign',$p))
     $params["variables"]["campaign"]=$p['campaign'];
   $username = Civi::settings()->get('proca_login');
@@ -36,6 +35,7 @@ $password = Civi::settings()->get('proca_password');
 $ch = curl_init();
 //http://php.net/manual/en/function.curl-setopt.php
 curl_setopt($ch, CURLOPT_URL, "https://api.proca.app/api");
+print_r($username . ":" . $password);
 curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -54,7 +54,6 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 //curl_setopt($ch, CURLOPT_VERBOSE, true);
 
 $data = curl_exec($ch);
-print_r($data);
 curl_close($ch);
 $obj = json_decode($data,$p['associative'] ?: true);
   return $obj;
