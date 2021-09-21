@@ -28,6 +28,7 @@ $query = 'query actions ($org:String!,$limit:Int,$start:Int,$campaign:Int) {
     )
 );
 
+print_r($params);
   if (array_key_exists('campaign',$p))
     $params["variables"]["campaign"]=$p['campaign'];
   $username = Civi::settings()->get('proca_login');
@@ -53,6 +54,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 //curl_setopt($ch, CURLOPT_VERBOSE, true);
 
 $data = curl_exec($ch);
+print_r($data);
 curl_close($ch);
 $obj = json_decode($data,$p['associative'] ?: true);
   return $obj;
