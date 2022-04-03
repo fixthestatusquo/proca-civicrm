@@ -159,14 +159,30 @@ function proca_themes(&$themes) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
  */
-//function proca_navigationMenu(&$menu) {
-//  _proca_civix_insert_navigation_menu($menu, 'Mailings', array(
-//    'label' => E::ts('New subliminal message'),
-//    'name' => 'mailing_subliminal_message',
-//    'url' => 'civicrm/mailing/subliminal',
-//    'permission' => 'access CiviMail',
-//    'operator' => 'OR',
-//    'separator' => 0,
-//  ));
-//  _proca_civix_navigationMenu($menu);
-//}
+function proca_navigationMenu(&$menu) {
+  _proca_civix_insert_navigation_menu($menu, 'Administer', [
+    'label' => E::ts('Proca'),
+    'name' => 'Proca',
+    'url' => NULL,
+    'permission' => 'administer CiviCRM',
+    'operator' => NULL,
+    'separator' => NULL,
+  ]);
+
+  _proca_civix_insert_navigation_menu($menu, 'Administer/Proca', [
+    'label' => E::ts('Configure'),
+    'name' => 'Configure',
+    'url' => CRM_Utils_System::url('civicrm/admin/proca', '', TRUE),
+    'permission' => 'administer CiviCRM',
+    'operator' => NULL,
+    'separator' => 0,
+  ]);
+  _proca_civix_insert_navigation_menu($menu, 'Administer/Proca', [
+    'label' => E::ts('Dashboard'),
+    'name' => 'Dashboard',
+    'url' => CRM_Utils_System::url('civicrm/proca', '', TRUE),
+    'permission' => 'administer CiviCRM',
+    'operator' => NULL,
+    'separator' => 0,
+  ]);
+}

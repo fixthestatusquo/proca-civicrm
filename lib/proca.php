@@ -35,6 +35,7 @@ $password = Civi::settings()->get('proca_password');
 $ch = curl_init();
 //http://php.net/manual/en/function.curl-setopt.php
 curl_setopt($ch, CURLOPT_URL, "https://api.proca.app/api");
+print_r($username . ":" . $password);
 curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");

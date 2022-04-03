@@ -92,7 +92,7 @@ function _civicrm_api3_action_contact_create_spec(&$spec) {
     'type' => CRM_Utils_Type::T_INT,
     'api.default' => '',
   ];
-  $spec['campaign'] = [
+  $spec['campaign_name'] = [
     'name' => 'campaign_name',
     'title' => ts('Campaign name'),
     'description' => 'Unique campaign name',
@@ -251,7 +251,7 @@ function civicrm_api3_action_contact_create($params) {
   ];
   if (in_array("comment",$params))
     $activity["details"] = $params["comment"];
-  
+
   if (!$createParams["id"]) {
     $activity["status_id"] ="completed_new_member";
   }
