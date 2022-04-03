@@ -15,13 +15,15 @@ class CRM_Proca_Logic_Address {
    * @return mixed
    */
   public function prepareParamsAddress($contact, $existingContact, $params) {
+	  if ($params['postal_code'])
+		  $params['postal_code'] = substr($params['posta_code'],0,64);
     if ($existingContact[self::API_ADDRESS_GET]['count'] == 1) {
       // if we have a one address, we update it by new values (?)
       if ((array_key_exists('postal_code', $existingContact[self::API_ADDRESS_GET]['values'][0]) && $existingContact[self::API_ADDRESS_GET]['values'][0]['postal_code'] != $params['postal_code']) ||
         (array_key_exists('country_id', $existingContact[self::API_ADDRESS_GET]['values'][0]) && $existingContact[self::API_ADDRESS_GET]['values'][0]['country_id'] != $params['country_id'])
       ) {
         $contact[self::API_ADDRESS_CREATE]['id'] = $existingContact[self::API_ADDRESS_GET]['id'];
-        $contact[self::API_ADDRESS_CREATE]['postal_code'] = $params['postal_code'];
+        $contact[self::API_ADDRESS_CREATE]['postal_code'] = substr($params['postal_code'],62);
         $contact[self::API_ADDRESS_CREATE]['country_id'] = $params['country_id'];
       }
     }
@@ -58,7 +60,7 @@ class CRM_Proca_Logic_Address {
             !array_key_exists('postal_code', $adr)
           ) {
             $contact[self::API_ADDRESS_CREATE]['id'] = $v['id'];
-            $contact[self::API_ADDRESS_CREATE]['postal_code'] = $params['postal_code'];
+            $contact[self::API_ADDRESS_CREATE]['postal_code'] = substr($params['postal_code'],0,64);
             break;
           }
         }
@@ -85,7 +87,7 @@ class CRM_Proca_Logic_Address {
    */
   public function prepareParamsAddressDefault($contact, $params) {
     $contact[self::API_ADDRESS_CREATE]['location_type_id'] = 1;
-    $contact[self::API_ADDRESS_CREATE]['postal_code'] = $params['postal_code'];
+    $contact[self::API_ADDRESS_CREATE]['postal_code'] = substr($params['postal_code'],0,64);
     $contact[self::API_ADDRESS_CREATE]['country'] = $params['country'];
     return $contact;
   }

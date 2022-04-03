@@ -13,6 +13,7 @@ function _civicrm_api3_job_proca_spec(&$spec)
   $spec["max_time"]["api.default"] = 0;
   $spec["max_time"]["description"] =
     "Stop procesing after this many seconds. Zero means stop when all done.";
+  $spec["verbose"]["api.default"] = false;
   $spec["fetch"]["api.default"] = true;
   $spec["fetch"]["api.description"] =
     "fetch a batch of contacts and queue them";
@@ -37,8 +38,9 @@ function civicrm_api3_job_proca($params)
   $QUEUE_NAME = "proca";
   $fetched = 0;
   $processed = 0;
-
+ 
   $fetchBatch = function ($p) use (&$fetched) {
+
     $last = $p["last"];
     $queue = $p["queue"];
     try {
@@ -48,12 +50,14 @@ function civicrm_api3_job_proca($params)
         "limit" => $p["limit"],
       ]);
     } catch (CiviCRM_API3_Exception $e) {
-      $error = $e->getMessage();
+	    $error = $e->getMessage();
     }
 
     foreach ($contacts["values"] as $contact) {
       $last = $contact["actionId"];
-
+      if ($p["verbose"]) {
+	      print_r($contact);
+      }
       try {
         $task = $queue->createItem(
           new CRM_Queue_Task(
@@ -91,6 +95,7 @@ function civicrm_api3_job_proca($params)
     $fetchBatch([
       "queue" => $queue,
       "org" => Civi::settings()->get("proca_org"),
+      "verbose" => $params['verbose'],
       "limit" => 0 + ($params["limit"] ? $params["limit"] : Civi::settings()->get("proca_limit")),
       "last" => Civi::settings()->get("proca_lastid"),
     ]);

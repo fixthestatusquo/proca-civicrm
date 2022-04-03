@@ -139,6 +139,7 @@ function civicrm_api3_action_contact_create($params) {
 //  $locale = $campaign->determineLanguage($params['action_name']);
   $contactObj = new CRM_Proca_Logic_Contact();
 
+
   $contact = array(
     'contact_type' => 'Individual',
     'email' => $params['email'],
@@ -205,7 +206,6 @@ function civicrm_api3_action_contact_create($params) {
     $createParams["created_date"] =$params['created_date'] ;
 
   }
-
 
   if ($updateContact) {
     $createParams["sequential"] =true ;
